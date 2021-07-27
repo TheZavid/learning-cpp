@@ -1,51 +1,39 @@
 #include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
+#include <algorithm>
 
-using namespace std;
-
-void print_vec(const std::vector<char>& vec)
+int main()
 {
-    for (auto x: vec) {
-         std::cout << ' ' << x;
-    }
-    std::cout << '\n';
-}
+	size_t count_oper = 0;
+	std::cin >> count_oper;
 
-int main () {
-    vector<char> queue{};
-    int n;
-    int wq = 0;
-    cin >> n;
-    for (int i=0; i < n; i++) {
-        print_vec(queue);
-        string cmd;
-        cin >> cmd;
-        cout << cmd.size();
-        if (cmd.compare("WORRY_COUNT") == 0)
-            cout << wq << endl;
-        else {
-            cout << "here";
-            string t;
-            cin >> t;
-            int arg = atoi(t.c_str());
-            int in = (queue.size() - 1) - arg;
-            if (cmd.compare("WORRY") == 0)
-                if (queue[in] != 'w' && wq++)
-                    queue[in] = 'w';
-            else if (cmd.compare("QUIET") == 0)
-                if (queue[in] != 'q' && wq--)
-                    queue[in] = 'q';
-            else if (cmd.compare("COME") == 0) {
-                if (arg >=0)
-                    queue.insert(queue.begin(), arg, 'q');
-                else 
-                    while (arg++){
-                        if (queue[queue.back()] == 'w')
-                            wq--;
-                        queue.pop_back();
-                    }
-            }
-        }
-    }
+	std::vector<bool> queue;
+	for (size_t i = 0; i < count_oper; i++)
+	{
+		std::string operation;
+		std::cin >> operation;
+
+		if (operation == "COME")
+		{
+			size_t count = 0;
+			std::cin >> count;
+
+			queue.resize(queue.size() + count, false);
+		}
+		else
+		if (operation == "WORRY" || operation == "QUIET")
+		{
+			size_t count = 0;
+			std::cin >> count;
+			
+			queue[count] = (operation == "WORRY");
+		}
+		else
+		if (operation == "WORRY_COUNT")
+		{
+			std::cout << std::count(begin(queue), end(queue), true) << std::endl;
+		}
+	}
+	return 0;
 }
