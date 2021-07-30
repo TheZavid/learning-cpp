@@ -28,13 +28,21 @@ string GetHistory (const vector<string>& v) {
 
 class Person {
 public:
+    Person (const string& name, const string& lastName, int year) {
+        birthYear = year;
+        data[birthYear] = {name, lastName}; 
+    }
     void ChangeFirstName(int year, const string& name) {
-        data[year].name = name;
+        if (year >= birthYear)
+            data[year].name = name;
     }
     void ChangeLastName(int year, const string& lastName) {
-        data[year].lastName = lastName;
+        if (year >= birthYear)
+            data[year].lastName = lastName;
     }
-    string GetFullName(int year) {
+    string GetFullName(int year)  const {
+        if (year < birthYear)
+            return "No person";
         PersonData pd;
         for (const auto& rec: data) {
             if (rec.first > year) break;
@@ -49,7 +57,9 @@ public:
             return pd.lastName + " with unknown first name";
         return "Incognito";
     }
-    string GetFullNameWithHistory(int year) {
+    string GetFullNameWithHistory(int year) const {
+        if (year < birthYear)
+            return "No person";
         vector<string> names;
         vector<string> lastNames;
         for (const auto& rec: data) {
@@ -67,4 +77,6 @@ public:
     }
 private:
   map<int, PersonData> data;
+  int birthYear;
 };
+
