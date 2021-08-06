@@ -5,6 +5,8 @@
 #include <map>
 #include <set>
 #include <vector>
+#include <exception>
+
 using namespace std;
 
 class Rational {
@@ -15,6 +17,8 @@ public:
     }
 
     Rational(int numerator, int denominator) {
+        if (denominator == 0)
+            throw invalid_argument("Invalid argument");
         if (numerator == 0) {
             num = 0;
             denum = 1;
@@ -93,6 +97,8 @@ Rational operator*(const Rational& x, const Rational& y) {
 }
 
 Rational operator/(const Rational& x, const Rational& y) {
+    if (y.Numerator() == 0)
+        throw domain_error("Division by zero");
     return x * Rational(y.Denominator(), y.Numerator());
 }
 
@@ -102,4 +108,26 @@ bool operator<(const Rational& x, const Rational& y) {
 
 bool operator>(const Rational& x, const Rational& y) {
     return (x.Numerator() * y.Denominator()) > (y.Numerator() * x.Denominator());
+}
+
+
+int main () {
+    Rational l;
+    Rational r;
+    try {
+        cin >> l;
+        char c;
+        cin >> c;
+        cin >> r;
+        if (c == '+')
+            cout << l + r;
+        else if (c == '-')
+            cout << l - r;
+        else if (c == '*')
+            cout << l * r;
+        else
+            cout << l / r;
+    } catch( exception& e){
+        cout << e.what() << endl;
+    }
 }
